@@ -11,6 +11,7 @@ import { ConfigModule } from '@nestjs/config';
 @Module({
   controllers: [AuthController],
   providers: [AuthService],
+  exports: [AuthService],
   imports: [
     ConfigModule.forRoot(),
 

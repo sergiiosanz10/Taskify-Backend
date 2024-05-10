@@ -3,8 +3,10 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 @Schema()
 export class Task {
 
-    _id?: string;
-
+    _taskId?: string;
+    
+    @Prop()
+    userId: string;
 
     @Prop()
     label: string;
@@ -13,19 +15,19 @@ export class Task {
     name: string;
 
     @Prop()
-    description: string;
+    description?: string;
 
     @Prop()
-    time_start: string;
+    time_start?: string;
 
     @Prop()
-    time_end: string;
+    time_end?: string;
 
     @Prop()
-    date: string;
+    date?: string;
 
     @Prop()
-    color: string;
+    color?: string;
     
     @Prop({ default: false })
     status: boolean;
