@@ -16,12 +16,12 @@ export class DashboardService {
 
   async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
     try {
-      const taskData = createTaskDto;
+      const taskData = {
+        ...createTaskDto,
+        taskId: this.generateTaskId(), // Asegúrate de que estás asignando un valor a taskId
+      };
 
-
-      const newTask = new this.taskModel({
-        ...taskData
-      });
+      const newTask = new this.taskModel(taskData);
 
       await newTask.save();
 
@@ -39,6 +39,7 @@ export class DashboardService {
     const task = await this.createTask(createTaskDto);
 
     return {
+      taskId: task.taskId,
       userId: task.userId,
       label: task.label,
       name: task.name,
@@ -60,6 +61,7 @@ export class DashboardService {
       console.log(`Fetching tasks for user: ${user._id}`);
       const tasks: Task[] = await this.taskModel.find({ userId: user._id }).exec();
       return tasks.map((task: Task) => ({
+        taskId: task.taskId,
         userId: user._id,
         label: task.label,
         name: task.name,
@@ -76,6 +78,19 @@ export class DashboardService {
     }
   }
 
+
+  async deleteTask(taskId: string): Promise<void> {
+  try {
+    await this.taskModel.deleteOne({ taskId: taskId }).exec();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+  generateTaskId() {
+    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  }
 
   findAll(): Promise<Task[]> {
     return this.taskModel.find().exec();

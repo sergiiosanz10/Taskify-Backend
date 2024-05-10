@@ -1,4 +1,5 @@
 export interface TaskResponse {
+    taskId:      string;
     userId:      string;
     label:       string;
     name:        string;

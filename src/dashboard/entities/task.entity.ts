@@ -3,7 +3,9 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 @Schema()
 export class Task {
 
-    _taskId?: string;
+
+    @Prop()
+    taskId: string;
     
     @Prop()
     userId: string;

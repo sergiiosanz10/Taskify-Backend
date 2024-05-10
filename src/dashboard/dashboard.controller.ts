@@ -1,8 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards, HttpException, HttpStatus } from '@nestjs/common';
 import { DashboardService } from './dashboard.service';
-import { UpdateDashboardDto } from './dto/update-dashboard.dto';
 import { CreateTaskDto } from './dto/create-task.dto';
-import { TaskResponse } from './interfaces/task-response';
 import { Task } from './entities/task.entity';
 import { User } from 'src/auth/entities/user.entity';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
@@ -27,6 +25,18 @@ export class DashboardController {
     }
     return this.dashboardService.getTasks(user);
   }
+
+
+  @Delete('tareas-asignadas/:taskId')
+  async deleteTask(@Param('taskId') taskId: string) {
+    try {
+      await this.dashboardService.deleteTask(taskId);
+    } catch (error) {
+      console.error(error);
+      throw new HttpException('Error deleting task', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
 
   // @Get('load-tasks')
   // async loadTaks(): Promise<Task[]> {
