@@ -10,6 +10,7 @@ import { User } from './entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './interfaces/jwt-payload';
 import { LoginResponse } from './interfaces/login-response';
+import { Task } from '../dashboard/entities/task.entity';
 
 @Injectable()
 export class AuthService {
@@ -25,9 +26,9 @@ export class AuthService {
 
 
     try {
-      
+
       //Encriptar contraseña
-      const {password, ...userData} = createUserDto;
+      const { password, ...userData } = createUserDto;
 
       const newUser = new this.userModel({
         password: bycryptjs.hashSync(password, 10),
@@ -37,7 +38,7 @@ export class AuthService {
 
       await newUser.save();
 
-      const {password: _, ...user} = newUser.toJSON();
+      const { password: _, ...user } = newUser.toJSON();
 
       return user
 
@@ -50,24 +51,25 @@ export class AuthService {
 
   }
 
-  async register(registerDto:RegisterDto): Promise<LoginResponse>{
+  async register(registerDto: RegisterDto): Promise<LoginResponse> {
 
-    const user = await this.create( registerDto )
+    const user = await this.create(registerDto)
 
     return {
       user: user,
-      token: this.getJwtToken({id: user._id}),
+      token: this.getJwtToken({ id: user._id }),
     }
   }
 
 
-  async login(loginDto: LoginDto): Promise<LoginResponse>{
-    
-    const {email, password} = loginDto;
+
+  async login(loginDto: LoginDto): Promise<LoginResponse> {
+
+    const { email, password } = loginDto;
 
     // Verificar que el email coincide con el de la BD
-    const user = await this.userModel.findOne({email});
-    if(!user){
+    const user = await this.userModel.findOne({ email });
+    if (!user) {
       throw new UnauthorizedException('No valid credentials - email');
     }
 
@@ -75,13 +77,13 @@ export class AuthService {
     if (!bycryptjs.compareSync(password, user.password)) {
       throw new UnauthorizedException('No valid credentials - password');
     }
-    
 
-    const {password:_, ...rest} = user.toJSON()
+
+    const { password: _, ...rest } = user.toJSON()
 
     return {
       user: rest,
-      token: this.getJwtToken({id: user.id}),
+      token: this.getJwtToken({ id: user.id }),
     }
   }
 
@@ -89,9 +91,9 @@ export class AuthService {
     return this.userModel.find();
   }
 
-  async findUserById(id: string){
-    const user = await this.userModel.findById( id );
-    const {password, ...rest} = user.toJSON();
+  async findUserById(id: string) {
+    const user = await this.userModel.findById(id);
+    const { password, ...rest } = user.toJSON();
 
     return rest;
   }
@@ -108,7 +110,7 @@ export class AuthService {
     return `This action removes a #${id} auth`;
   }
 
-  getJwtToken(payload: JwtPayload){
+  getJwtToken(payload: JwtPayload) {
 
     const token = this.jwtService.sign(payload);
 
