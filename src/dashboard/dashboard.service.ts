@@ -50,7 +50,6 @@ export class DashboardService {
       color: task.color,
       status: task.status
     }
-
   }
 
   async getTasks(user: User): Promise<TaskResponse[]> {
