@@ -4,6 +4,7 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { Task } from './entities/task.entity';
 import { User } from 'src/auth/entities/user.entity';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { TaskResponse } from './interfaces/task-response';
 
 @Controller('dashboard')
 export class DashboardController {
@@ -24,6 +25,20 @@ export class DashboardController {
       throw new Error('User not found in request');
     }
     return this.dashboardService.getTasks(user);
+  }
+
+
+  @UseGuards(AuthGuard)
+  @Patch('tareas-asignadas/:taskId')
+  async modifyTask(@Param('taskId') taskId: string, @Body() updateTaskDto: CreateTaskDto): Promise<TaskResponse> {
+
+    try {
+      console.log(updateTaskDto);
+      return await this.dashboardService.modifyTask(taskId, updateTaskDto);
+    } catch (error) {
+      console.error(error);
+      throw new HttpException('Error modifying task', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
 

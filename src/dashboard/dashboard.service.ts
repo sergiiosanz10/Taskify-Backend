@@ -78,6 +78,35 @@ export class DashboardService {
     }
   }
 
+async modifyTask(taskId: string, updateTaskDto: CreateTaskDto): Promise<TaskResponse> {
+  try {
+    // Filtra updateTaskDto para eliminar campos undefined o null
+    const filteredUpdateTaskDto = Object.fromEntries(
+      Object.entries(updateTaskDto).filter(([_, v]) => v !== undefined && v !== null)
+    );
+
+    const task = await this.taskModel.findOneAndUpdate({ taskId: taskId }, filteredUpdateTaskDto, { new: true }).exec();
+    if (!task) {
+      throw new Error(`Task with taskId ${taskId} not found`);
+    }
+    return {
+      taskId: task.taskId,
+      userId: task.userId,
+      label: task.label,
+      name: task.name,
+      description: task.description,
+      time_start: task.time_start,
+      time_end: task.time_end,
+      date: task.date,
+      color: task.color,
+      status: task.status
+    };
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 
   async deleteTask(taskId: string): Promise<void> {
   try {

@@ -4,10 +4,10 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 export class Task {
 
 
-    @Prop()
+    @Prop({ unique: true, required: true })
     taskId: string;
     
-    @Prop()
+    @Prop({ unique: true, required: true })
     userId: string;
 
     @Prop()
