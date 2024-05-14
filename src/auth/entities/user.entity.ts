@@ -5,6 +5,9 @@ export class User {
 
     _id?: string;
 
+    @Prop({default: 0})
+    admin: number
+
     @Prop({ unique: true, required: true })
     email: string;
 

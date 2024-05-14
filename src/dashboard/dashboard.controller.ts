@@ -41,7 +41,6 @@ export class DashboardController {
     }
   }
 
-  @UseGuards(AuthGuard)
   @Delete('tareas-asignadas/:taskId')
   async deleteTask(@Param('taskId') taskId: string) {
     try {
