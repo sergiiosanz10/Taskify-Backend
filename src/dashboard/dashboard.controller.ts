@@ -41,7 +41,7 @@ export class DashboardController {
     }
   }
 
-
+  @UseGuards(AuthGuard)
   @Delete('tareas-asignadas/:taskId')
   async deleteTask(@Param('taskId') taskId: string) {
     try {
@@ -52,6 +52,17 @@ export class DashboardController {
     }
   }
 
+  @UseGuards(AuthGuard)
+  @Delete('gestion/:id')
+  async deleteUser(@Param('id') id: string) {
+    try {
+      await this.dashboardService.deleteUser(id);
+    } catch (error) {
+      console.log(id);
+      console.error(error);
+      throw new HttpException('Error deleting user', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 
   // @Get('load-tasks')
   // async loadTaks(): Promise<Task[]> {

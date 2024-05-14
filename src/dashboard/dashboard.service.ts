@@ -12,6 +12,7 @@ export class DashboardService {
 
   constructor(
     @InjectModel(Task.name) private taskModel: Model<Task>,
+    @InjectModel(User.name) private userModel: Model<User>,
   ) { }
 
   async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
@@ -111,6 +112,16 @@ async modifyTask(taskId: string, updateTaskDto: CreateTaskDto): Promise<TaskResp
   try {
     await this.taskModel.deleteOne({ taskId: taskId }).exec();
   } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+async deleteUser(id: string): Promise<void> {
+  try {
+    await this.userModel.deleteOne({ _id: id }).exec();
+  } catch (error) {
+    console.log(id);
     console.error(error);
     throw error;
   }

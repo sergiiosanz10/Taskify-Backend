@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Request, Delete, Param, HttpException, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 import { CreateUserDto, LoginDto, RegisterDto } from './dto';
@@ -44,6 +44,7 @@ export class AuthController {
       token: this.authService.getJwtToken({id: user._id})
     }
   }
+
 
 
   // @Get(':id')

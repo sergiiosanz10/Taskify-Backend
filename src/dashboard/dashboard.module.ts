@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Task, TaskSchema } from './entities/task.entity';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { AuthModule } from 'src/auth/auth.module';
+import { User, UserSchema } from 'src/auth/entities/user.entity';
 
 @Module({
   controllers: [DashboardController],
@@ -15,6 +16,10 @@ import { AuthModule } from 'src/auth/auth.module';
       {
         name: Task.name,
         schema: TaskSchema
+      },
+      {
+        name: User.name,
+        schema: UserSchema
       }
     ]),
   ]  
